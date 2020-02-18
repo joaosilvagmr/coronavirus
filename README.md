@@ -82,7 +82,7 @@ file.edit("src/plots.r")
 
 This plot presents the evolution of Coronavirus case in the world as well as the recovered and the death cases.
 
-<img src="graphs/daily_evolution.png" width="65%" align="center"/></a>
+<img src="graphs/day_evolution.png" width="65%" align="center"/></a>
 
 This plot shows the daily variation of new cases, recoverys and deaths caused by the Coronavirus.
 
