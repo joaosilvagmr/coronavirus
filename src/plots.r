@@ -142,3 +142,10 @@ complete_dataset %>%
   layout(title = 'Coronavirus Distribution of Confirmed Cases (Asia)', geo = g)
 
 
+rank_countries <- confirmed %>% 
+  group_by(Country) %>% 
+  summarise(all_confirmed = sum(Confirmed_day)) %>% 
+  arrange(desc(all_confirmed)) %>% 
+  left_join(country_data[, c("Country", "Population")], by=c("Country"="Country")) %>% 
+  mutate(cases_by_1000_hab = all_confirmed/(Population/1000)) %>% 
+  arrange(desc(cases_by_1000_hab))

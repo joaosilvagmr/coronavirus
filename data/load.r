@@ -10,3 +10,7 @@ death <- read_csv(file = "https://raw.githubusercontent.com/CSSEGISandData/COVID
 ## get recovered cases
 
 recovered <- read_csv(file = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv")
+
+## country data
+
+#country_data <- read_csv(file = 'data/country_profile_variables.csv')
