@@ -1,3 +1,34 @@
+today_date <- as.Date("2020-03-18")
+
+
+### confirmed since day one
+
+evolution_of_confirmed <- confirmed %>% 
+  filter(!Confirmed==0) #%>% 
+#group_by(Country, State) %>% 
+#arrange(Date) %>% 
+#mutate(day_after = row_number())
+
+
+### China, Italy, Spain, Portugal, US, UK, France, Germany
+
+countries <- c("China","Italy","Spain","Portugal","US", "United Kingdom", "Germany", "France")
+
+evolution_of_confirmed_v2 <- evolution_of_confirmed %>% 
+  group_by(Country, Date) %>% 
+  summarise(Confirmed = sum(Confirmed), Confirmed_day = sum(Confirmed_day)) %>% 
+  ungroup() %>% 
+  group_by(Country) %>% 
+  arrange(Date) %>% 
+  mutate(day_after = row_number(),
+         day_after_10 = if_else(Confirmed>10,1,0)) %>%
+  ungroup() %>% 
+  group_by(Country) %>% 
+  arrange(Date) %>% 
+  mutate(day_after_10 = cumsum(day_after_10),
+         Confirmed = if_else((Country=="United Kingdom") & (Date == as.Date("2020-03-15")),1391,Confirmed))
+
+
 # predictions after march 18 and 
 
 today_cases <- evolution_of_confirmed_v2 %>% 
@@ -6,14 +37,15 @@ today_cases <- evolution_of_confirmed_v2 %>%
               filter(Country == "Portugal")) %>% 
   bind_rows(evolution_of_confirmed_v2 %>% 
               filter(Date > as.Date("2020-02-23") & Country %in% c("France", "US", "Germany"))) %>% 
-  filter(Country %in% countries) %>% 
+  filter(Country %in% countries,
+         Date < today_date) %>% 
   group_by(Country) %>% 
   arrange(Date) %>% 
   mutate(day_after = row_number()) %>% 
   ungroup() %>% 
   select(Country, Date, Confirmed)
 
-today_date <- as.Date(Sys.time())
+
 n_days <- 3
 
 for(i in 1:length(countries)) {
@@ -72,7 +104,15 @@ plot_all_countries <- predicted_cases %>%
          Confirmed = if_else((Country=="Germany") & Date==as.Date("2020-03-18"),12327,Confirmed),
          Confirmed = if_else((Country=="France") & Date==as.Date("2020-03-18"),9134,Confirmed),
          Confirmed = if_else((Country=="United Kingdom") & Date==as.Date("2020-03-18"),2626,Confirmed),
-         Confirmed = if_else((Country=="US") & Date==as.Date("2020-03-18"),8893,Confirmed)) %>% 
+         Confirmed = if_else((Country=="US") & Date==as.Date("2020-03-18"),8893,Confirmed),
+         #### march 19 values source("https://www.worldometers.info/coronavirus/")
+         Confirmed = if_else((Country=="Portugal") & Date==as.Date("2020-03-19"),785,Confirmed),
+         Confirmed = if_else((Country=="Spain") & Date==as.Date("2020-03-19"),17963,Confirmed),
+         Confirmed = if_else((Country=="Italy") & Date==as.Date("2020-03-19"),41035,Confirmed),
+         Confirmed = if_else((Country=="Germany") & Date==as.Date("2020-03-19"),15320,Confirmed),
+         Confirmed = if_else((Country=="France") & Date==as.Date("2020-03-19"),10995,Confirmed),
+         Confirmed = if_else((Country=="United Kingdom") & Date==as.Date("2020-03-19"),3269,Confirmed),
+         Confirmed = if_else((Country=="US") & Date==as.Date("2020-03-19"),11689,Confirmed)) %>%
   na_if(0) %>% 
   reshape(direction  = "wide", idvar="Date", timevar="Country") %>% 
   plot_ly() %>% 

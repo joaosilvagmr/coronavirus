@@ -14,3 +14,14 @@ recovered <- read_csv(file = "https://raw.githubusercontent.com/CSSEGISandData/C
 ## country data
 
 #country_data <- read_csv(file = 'data/country_profile_variables.csv')
+
+
+## temperatures
+
+temperature_max <- read_csv('https://raw.githubusercontent.com/imantsm/COVID-19/master/csv/tMax.csv')
+
+temperature_min <- read_csv('https://raw.githubusercontent.com/imantsm/COVID-19/master/csv/tMin.csv')          
+
+## important dates
+
+Important_dates <- read_csv('data/Important_Dates.csv')
