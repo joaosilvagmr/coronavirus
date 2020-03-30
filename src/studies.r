@@ -163,3 +163,15 @@ hum <- ggplotly(p, tooltip = "text") %>%
   layout(legend = list(font = list(size=10)))
   #plot_ly(x=~mean_temp, y=~evolution, color=~Continent, text =~text, type = 'scatter', mode = 'markers') %>% 
   api_create(filename = "Country-Evolution-Temp")
+  
+  
+####### join number of infected, active, deaths
+  
+  dataset_evo <- active %>% 
+    left_join(recovered %>% 
+                select(-c(Continent, State)), by=c("Date"="Date", "Country"="Country", "Lat"="Lat","Long"="Long")) %>% 
+    left_join(death %>% 
+                select(-c(Continent, State)), by=c("Date"="Date", "Country"="Country", "Lat"="Lat","Long"="Long")) %>% 
+    select(-c(Active_day, Recovered_day, Death_day)) %>% 
+    group_by(Continent, Country, Date) %>% 
+    summarise(Active = sum(Active), Recovered = sum(Recovered), Death = sum(Death))

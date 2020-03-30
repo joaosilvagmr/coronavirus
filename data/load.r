@@ -25,3 +25,11 @@ temperature_min <- read_csv('https://raw.githubusercontent.com/imantsm/COVID-19/
 ## important dates
 
 Important_dates <- read_csv('data/Important_Dates.csv')
+
+
+### Portugal
+
+Date <- as.Date()
+Confirmed <- 1
+Death <- 
+Recovered <- 
